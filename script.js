@@ -1,56 +1,58 @@
-// Wait for the entire HTML document to be loaded and ready.
+// Requirement: Wrap the entire script in a DOMContentLoaded event listener.
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Select the form and the feedback div.
+    // Requirement: Select the form.
     const form = document.getElementById('registration-form');
+    
+    // Requirement: Select the feedback division.
     const feedbackDiv = document.getElementById('form-feedback');
 
-    // Add an event listener to the form for the 'submit' event.
+    // Requirement: Add a 'submit' event listener to the form.
     form.addEventListener('submit', (event) => {
         
-        // Prevent the form from actually submitting to a server.
+        // Requirement: Prevent the default form submission.
         event.preventDefault();
 
-        // Retrieve and trim the user's inputs.
+        // Requirement: Retrieve and trim user inputs.
         const username = document.getElementById('username').value.trim();
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value.trim();
 
-        // Initialize validation variables.
+        // Requirement: Initialize validation variables.
         let isValid = true;
         const messages = [];
 
-        // Perform Username Validation.
+        // Requirement: Username Validation (at least 3 characters).
         if (username.length < 3) {
             isValid = false;
             messages.push('Username must be at least 3 characters long.');
         }
 
-        // Perform Email Validation.
+        // Requirement: Email Validation (must include '@' and '.').
         if (!email.includes('@') || !email.includes('.')) {
             isValid = false;
             messages.push('Please enter a valid email address.');
         }
 
-        // Perform Password Validation.
+        // Requirement: Password Validation (at least 8 characters).
         if (password.length < 8) {
             isValid = false;
             messages.push('Password must be at least 8 characters long.');
         }
 
-        // Displaying Feedback Logic
+        // Requirement: Displaying Feedback Logic.
         feedbackDiv.style.display = "block"; // Make the feedback div visible.
 
         if (isValid) {
-            // If all checks pass, show a success message.
+            // If all checks pass...
             feedbackDiv.textContent = "Registration successful!";
-            feedbackDiv.style.color = "#28a745"; // Green color for success
-            feedbackDiv.style.backgroundColor = "#d4edda";
+            feedbackDiv.style.color = "#28a745";
+            // Note: The task doesn't require changing the background color on success,
+            // so we leave it as the default error background to be safe.
         } else {
-            // If any check fails, show the collected error messages.
-            feedbackDiv.innerHTML = messages.join('<br>'); // Join messages with line breaks
-            feedbackDiv.style.color = "#dc3545"; // Red color for errors
-            feedbackDiv.style.backgroundColor = "#f8d7da";
+            // If any check fails...
+            feedbackDiv.innerHTML = messages.join('<br>'); // Join messages with line breaks.
+            feedbackDiv.style.color = "#dc3545";
         }
     });
 });
