@@ -1,5 +1,5 @@
 // Requirement: Wrap the entire script in a DOMContentLoaded event listener.
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() { // Using traditional function
 
     // Requirement: Select the form.
     const form = document.getElementById('registration-form');
@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const feedbackDiv = document.getElementById('form-feedback');
 
     // Requirement: Add a 'submit' event listener to the form.
-    form.addEventListener('submit', (event) => {
+    form.addEventListener('submit', function(event) { // Using traditional function
         
         // Requirement: Prevent the default form submission.
         event.preventDefault();
@@ -47,8 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
             // If all checks pass...
             feedbackDiv.textContent = "Registration successful!";
             feedbackDiv.style.color = "#28a745";
-            // Note: The task doesn't require changing the background color on success,
-            // so we leave it as the default error background to be safe.
         } else {
             // If any check fails...
             feedbackDiv.innerHTML = messages.join('<br>'); // Join messages with line breaks.
