@@ -17,11 +17,6 @@ form {
     max-width: 400px;
 }
 
-.input-group {
-    margin-bottom: 20px;
-    position: relative; /* Needed for positioning error messages */
-}
-
 label {
     display: block;
     margin-bottom: 5px;
@@ -31,28 +26,11 @@ label {
 
 input {
     padding: 10px;
+    margin-bottom: 20px;
     border: 1px solid #ccc;
     border-radius: 4px;
     width: 100%;
     box-sizing: border-box;
-}
-
-/* Style for valid inputs (green border) */
-input.valid {
-    border-color: #28a745;
-}
-
-/* Style for invalid inputs (red border) */
-input.invalid {
-    border-color: #dc3545;
-}
-
-.error-message {
-    color: #dc3545;
-    font-size: 12px;
-    display: block;
-    margin-top: 5px;
-    min-height: 15px; /* Prevents layout shifts */
 }
 
 button {

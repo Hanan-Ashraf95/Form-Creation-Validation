@@ -1,96 +1,56 @@
 // Wait for the entire HTML document to be loaded and ready.
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Select all the important elements from our HTML page.
+    // Select the form and the feedback div.
     const form = document.getElementById('registration-form');
-    const usernameInput = document.getElementById('username');
-    const emailInput = document.getElementById('email');
-    const passwordInput = document.getElementById('password');
     const feedbackDiv = document.getElementById('form-feedback');
 
-    // --- Validation Functions ---
-    // We create separate functions to keep our code clean.
-
-    function validateUsername() {
-        const username = usernameInput.value.trim();
-        const errorSpan = usernameInput.nextElementSibling; // The span right after the input
-
-        if (username.length >= 3) {
-            usernameInput.classList.add('valid');
-            usernameInput.classList.remove('invalid');
-            errorSpan.textContent = '';
-            return true;
-        } else {
-            usernameInput.classList.add('invalid');
-            usernameInput.classList.remove('valid');
-            errorSpan.textContent = 'Username must be at least 3 characters long.';
-            return false;
-        }
-    }
-
-    function validateEmail() {
-        const email = emailInput.value.trim();
-        const errorSpan = emailInput.nextElementSibling;
-        // This is a Regular Expression (regex) for better email validation.
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (emailPattern.test(email)) {
-            emailInput.classList.add('valid');
-            emailInput.classList.remove('invalid');
-            errorSpan.textContent = '';
-            return true;
-        } else {
-            emailInput.classList.add('invalid');
-            emailInput.classList.remove('valid');
-            errorSpan.textContent = 'Please enter a valid email address.';
-            return false;
-        }
-    }
-
-    function validatePassword() {
-        const password = passwordInput.value.trim();
-        const errorSpan = passwordInput.nextElementSibling;
-
-        if (password.length >= 8) {
-            passwordInput.classList.add('valid');
-            passwordInput.classList.remove('invalid');
-            errorSpan.textContent = '';
-            return true;
-        } else {
-            passwordInput.classList.add('invalid');
-            passwordInput.classList.remove('valid');
-            errorSpan.textContent = 'Password must be at least 8 characters long.';
-            return false;
-        }
-    }
-
-    // --- Real-time Event Listeners ---
-    // These run the validation function every time the user types.
-
-    usernameInput.addEventListener('input', validateUsername);
-    emailInput.addEventListener('input', validateEmail);
-    passwordInput.addEventListener('input', validatePassword);
-
-    // --- Form Submission Event Listener ---
+    // Add an event listener to the form for the 'submit' event.
     form.addEventListener('submit', (event) => {
-        event.preventDefault(); // Stop the form from submitting.
+        
+        // Prevent the form from actually submitting to a server.
+        event.preventDefault();
 
-        // Run all validations one last time before submitting.
-        const isUsernameValid = validateUsername();
-        const isEmailValid = validateEmail();
-        const isPasswordValid = validatePassword();
+        // Retrieve and trim the user's inputs.
+        const username = document.getElementById('username').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
 
-        // Check if the entire form is valid.
-        if (isUsernameValid && isEmailValid && isPasswordValid) {
-            feedbackDiv.style.display = 'block';
-            feedbackDiv.textContent = 'Registration successful!';
-            feedbackDiv.style.color = '#28a745';
-            feedbackDiv.style.backgroundColor = '#d4edda';
+        // Initialize validation variables.
+        let isValid = true;
+        const messages = [];
+
+        // Perform Username Validation.
+        if (username.length < 3) {
+            isValid = false;
+            messages.push('Username must be at least 3 characters long.');
+        }
+
+        // Perform Email Validation.
+        if (!email.includes('@') || !email.includes('.')) {
+            isValid = false;
+            messages.push('Please enter a valid email address.');
+        }
+
+        // Perform Password Validation.
+        if (password.length < 8) {
+            isValid = false;
+            messages.push('Password must be at least 8 characters long.');
+        }
+
+        // Displaying Feedback Logic
+        feedbackDiv.style.display = "block"; // Make the feedback div visible.
+
+        if (isValid) {
+            // If all checks pass, show a success message.
+            feedbackDiv.textContent = "Registration successful!";
+            feedbackDiv.style.color = "#28a745"; // Green color for success
+            feedbackDiv.style.backgroundColor = "#d4edda";
         } else {
-            feedbackDiv.style.display = 'block';
-            feedbackDiv.textContent = 'Please correct the errors above.';
-            feedbackDiv.style.color = '#dc3545';
-            feedbackDiv.style.backgroundColor = '#f8d7da';
+            // If any check fails, show the collected error messages.
+            feedbackDiv.innerHTML = messages.join('<br>'); // Join messages with line breaks
+            feedbackDiv.style.color = "#dc3545"; // Red color for errors
+            feedbackDiv.style.backgroundColor = "#f8d7da";
         }
     });
 });
