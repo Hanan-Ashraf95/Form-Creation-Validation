@@ -1,59 +1,96 @@
-// Step 1: Wait for the entire HTML document to be loaded and ready.
+// Wait for the entire HTML document to be loaded and ready.
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Step 2: Select the important elements from our HTML page.
+    // Select all the important elements from our HTML page.
     const form = document.getElementById('registration-form');
+    const usernameInput = document.getElementById('username');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
     const feedbackDiv = document.getElementById('form-feedback');
 
-    // Step 3: Add an event listener to watch for the 'submit' event on our form.
-    form.addEventListener('submit', (event) => {
-        
-        // Step 4: Stop the form from submitting right away.
-        // Our "security guard" says "WAIT! Let me check your info."
-        event.preventDefault();
+    // --- Validation Functions ---
+    // We create separate functions to keep our code clean.
 
-        // Step 5: Get the user's input and trim any extra spaces from the ends.
-        const username = document.getElementById('username').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value.trim();
+    function validateUsername() {
+        const username = usernameInput.value.trim();
+        const errorSpan = usernameInput.nextElementSibling; // The span right after the input
 
-        // Step 6: Prepare for validation.
-        let isValid = true; // A flag to track if everything is correct.
-        const messages = []; // A list to hold any error messages.
-
-        // Step 7: Perform the validation checks.
-        
-        // Username Validation
-        if (username.length < 3) {
-            isValid = false;
-            messages.push('Username must be at least 3 characters long.');
-        }
-
-        // Email Validation
-        if (!email.includes('@') || !email.includes('.')) {
-            isValid = false;
-            messages.push('Please enter a valid email address.');
-        }
-
-        // Password Validation
-        if (password.length < 8) {
-            isValid = false;
-            messages.push('Password must be at least 8 characters long.');
-        }
-
-        // Step 8: Display feedback to the user.
-        feedbackDiv.style.display = 'block'; // Make the feedback box visible.
-
-        if (isValid) {
-            // If everything is correct...
-            feedbackDiv.textContent = 'Registration successful!';
-            feedbackDiv.style.color = '#28a745'; // Green for success
-            feedbackDiv.style.backgroundColor = '#d4edda'; // Light green background
+        if (username.length >= 3) {
+            usernameInput.classList.add('valid');
+            usernameInput.classList.remove('invalid');
+            errorSpan.textContent = '';
+            return true;
         } else {
-            // If there are errors...
-            feedbackDiv.innerHTML = messages.join('<br>'); // Join messages with line breaks.
-            feedbackDiv.style.color = '#dc3545'; // Red for error
-            feedback-div.style.backgroundColor = '#f8d7da'; // Light red background
+            usernameInput.classList.add('invalid');
+            usernameInput.classList.remove('valid');
+            errorSpan.textContent = 'Username must be at least 3 characters long.';
+            return false;
+        }
+    }
+
+    function validateEmail() {
+        const email = emailInput.value.trim();
+        const errorSpan = emailInput.nextElementSibling;
+        // This is a Regular Expression (regex) for better email validation.
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (emailPattern.test(email)) {
+            emailInput.classList.add('valid');
+            emailInput.classList.remove('invalid');
+            errorSpan.textContent = '';
+            return true;
+        } else {
+            emailInput.classList.add('invalid');
+            emailInput.classList.remove('valid');
+            errorSpan.textContent = 'Please enter a valid email address.';
+            return false;
+        }
+    }
+
+    function validatePassword() {
+        const password = passwordInput.value.trim();
+        const errorSpan = passwordInput.nextElementSibling;
+
+        if (password.length >= 8) {
+            passwordInput.classList.add('valid');
+            passwordInput.classList.remove('invalid');
+            errorSpan.textContent = '';
+            return true;
+        } else {
+            passwordInput.classList.add('invalid');
+            passwordInput.classList.remove('valid');
+            errorSpan.textContent = 'Password must be at least 8 characters long.';
+            return false;
+        }
+    }
+
+    // --- Real-time Event Listeners ---
+    // These run the validation function every time the user types.
+
+    usernameInput.addEventListener('input', validateUsername);
+    emailInput.addEventListener('input', validateEmail);
+    passwordInput.addEventListener('input', validatePassword);
+
+    // --- Form Submission Event Listener ---
+    form.addEventListener('submit', (event) => {
+        event.preventDefault(); // Stop the form from submitting.
+
+        // Run all validations one last time before submitting.
+        const isUsernameValid = validateUsername();
+        const isEmailValid = validateEmail();
+        const isPasswordValid = validatePassword();
+
+        // Check if the entire form is valid.
+        if (isUsernameValid && isEmailValid && isPasswordValid) {
+            feedbackDiv.style.display = 'block';
+            feedbackDiv.textContent = 'Registration successful!';
+            feedbackDiv.style.color = '#28a745';
+            feedbackDiv.style.backgroundColor = '#d4edda';
+        } else {
+            feedbackDiv.style.display = 'block';
+            feedbackDiv.textContent = 'Please correct the errors above.';
+            feedbackDiv.style.color = '#dc3545';
+            feedbackDiv.style.backgroundColor = '#f8d7da';
         }
     });
 });
